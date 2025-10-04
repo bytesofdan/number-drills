@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Number Drills - GCSE Fundamentals</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6ee7b7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Number Drills">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="no-print">
+  <h1>Number Drills</h1>
+  <p class="tiny">Fast practice. Zero fluff. Built for adults brushing up GCSE maths.</p>
+</header>
+
+<div class="wrap layout no-print">
+  <aside class="side panel sticky">
+    <h2 class="section-title">Setup</h2>
+    <div class="controls">
+      <div>
+        <label for="mode">Mode</label>
+        <select id="mode">
+          <option value="multiplication">Multiplication (×)</option>
+          <option value="division">Division (÷)</option>
+          <option value="squares">Squares (n²)</option>
+          <option value="cubes">Cubes (n³)</option>
+          <option value="sqrt">Square roots (√n²)</option>
+          <option value="cbrt">Cube roots (∛n³)</option>
+          <option value="fractions">Fractions of a number</option>
+          <option value="percentages">Percentages</option>
+          <option value="mixed">Mixed</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Range (for n)</label>
+        <div class="rangepair">
+          <input id="minN" type="number" value="1" min="0">
+          <input id="maxN" type="number" value="12" min="1">
+        </div>
+        <div class="tiny">Roots use perfect powers from this range.</div>
+      </div>
+
+      <div id="focusWrap" class="hidden">
+        <label for="focusTable">Focus table (× only)</label>
+        <select id="focusTable">
+          <option value="0">Off</option>
+          <option value="1">×1</option>
+          <option value="2">×2</option>
+          <option value="3">×3</option>
+          <option value="4">×4</option>
+          <option value="5">×5</option>
+          <option value="6">×6</option>
+          <option value="7">×7</option>
+          <option value="8">×8</option>
+          <option value="9">×9</option>
+          <option value="10">×10</option>
+          <option value="11">×11</option>
+          <option value="12">×12</option>
+        </select>
+        <div class="tiny">When on, questions are "n × k".</div>
+      </div>
+
+      <div id="focusDivWrap" class="hidden">
+        <label for="focusDiv">Focus divisor (÷ only)</label>
+        <select id="focusDiv">
+          <option value="0">Off</option>
+          <option value="1">÷1</option>
+          <option value="2">÷2</option>
+          <option value="3">÷3</option>
+          <option value="4">÷4</option>
+          <option value="5">÷5</option>
+          <option value="6">÷6</option>
+          <option value="7">÷7</option>
+          <option value="8">÷8</option>
+          <option value="9">÷9</option>
+          <option value="10">÷10</option>
+          <option value="11">÷11</option>
+          <option value="12">÷12</option>
+        </select>
+        <div class="tiny">When on, questions are "(k×n) ÷ k".</div>
+      </div>
+
+      <div>
+        <label>Session size</label>
+        <input id="sessionSize" type="number" value="20" min="5" max="500">
+      </div>
+      
+      <details>
+        <summary>Advanced options</summary>
+        <div class="checkbox-group mt-8">
+          <div class="inline">
+            <input id="shuffleTables" type="checkbox" checked>
+            <label for="shuffleTables">Shuffle order</label>
+          </div>
+          <div class="inline">
+            <input id="troubleOnly" type="checkbox">
+            <label for="troubleOnly">Trouble-only</label>
+          </div>
+          <div class="inline">
+            <input id="strictTiming" type="checkbox">
+            <label for="strictTiming" id="strictTimingLabel">Time limit (5s)</label>
+          </div>
+          <div class="inline">
+            <input id="soundToggle" type="checkbox" checked>
+            <label for="soundToggle">Sounds</label>
+          </div>
+          <div class="inline">
+            <input id="timedTest" type="checkbox">
+            <label for="timedTest">Timed test</label>
+          </div>
+        </div>
+        <div id="timedOptions" class="row mt-8" hidden>
+          <label for="testSeconds">Seconds:</label>
+          <input id="testSeconds" type="number" value="60" min="15" max="1800">
+        </div>
+      </details>
+
+      <div class="row mt-12">
+        <button class="btn accent" id="startBtn">Start / Reset</button>
+        <button class="btn" id="themeToggleBtn" title="Light / Dark / Auto">Theme</button>
+      </div>
+
+      <details class="mt-12">
+        <summary>Tools</summary>
+        <div class="row mt-8">
+          <button class="btn" id="exportBtn">Export progress</button>
+          <input id="importFile" type="file" accept="application/json" hidden>
+          <button class="btn" id="importBtn">Import progress</button>
+        </div>
+        <div class="row mt-8">
+          <button class="btn small" id="printBlankBtn">Times tables 20×20 (blank)</button>
+          <button class="btn small" id="printAnswerBtn">Times tables 20×20 (answers)</button>
+        </div>
+        <div class="row mt-8">
+          <button class="btn small" id="printSquaresBlankBtn">Squares 1-15 (blank)</button>
+          <button class="btn small" id="printSquaresAnswerBtn">Squares 1-15 (answers)</button>
+        </div>
+        <div class="row mt-8">
+          <button class="btn small" id="printCubesBlankBtn">Cubes 1-10 (blank)</button>
+          <button class="btn small" id="printCubesAnswerBtn">Cubes 1-10 (answers)</button>
+        </div>
+        <div class="row mt-8">
+          <button class="btn small" id="printPrimesBlankBtn">Primes ≤100 (blank)</button>
+          <button class="btn small" id="printPrimesAnswerBtn">Primes ≤100 (answers)</button>
+        </div>
+        <div class="row mt-8">
+          <button class="btn secondary small" id="clearProgressBtn">Clear local progress</button>
+        </div>
+      </details>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="panel">
+      <div class="row" style="justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <div class="row tiny labels-row" style="margin:0;">
+          <span class="tag" id="modeTag">Mode: Multiplication</span>
+          <span class="tag" id="rangeTag">Range: 1-12</span>
+        </div>
+        <button class="btn small" id="toggleStatsBtn">View Statistics</button>
+      </div>
+
+      <div class="quiz" id="quizBox" aria-live="polite">
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+        </div>
+        <div class="prompt" id="prompt">Press "Start / Reset"</div>
+        <div class="answerbox">
+          <span class="equals">=</span>
+          <label class="sr-only" for="answer">Answer</label>
+          <input id="answer" inputmode="numeric" autocomplete="off" placeholder="Your answer" disabled aria-describedby="feedback">
+          <button class="btn" id="checkBtn" disabled>Check (Enter)</button>
+          <button class="btn accent" id="continueBtn" style="display:none;">Continue (Enter)</button>
+          <button class="btn secondary" id="skipBtn" disabled>Skip (N)</button>
+        </div>
+        <div class="feedback tiny" id="feedback" role="status" aria-live="polite"></div>
+
+        <div class="stats" aria-live="polite" aria-atomic="true">
+          <div class="stat"><span class="big" id="statDone">0</span><span class="tiny">Done</span></div>
+          <div class="stat"><span class="big" id="statCorrect">0</span><span class="tiny">Correct</span></div>
+          <div class="stat"><span class="big" id="statAccuracy">0%</span><span class="tiny">Accuracy</span></div>
+          <div class="stat"><span class="big" id="statStreak">0</span><span class="tiny">Streak</span></div>
+          <div class="stat"><span class="big" id="statTime">—</span><span class="tiny">Time left</span></div>
+        </div>
+
+        <div class="tiny">Shortcuts: <kbd>Enter</kbd> check • <kbd>N</kbd> skip</div>
+      </div>
+    </section>
+
+    <section class="panel" id="statsSection">
+      <div class="row" style="justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h2 class="section-title" style="margin:0;">Statistics Dashboard</h2>
+        <button class="btn small secondary" id="closeStatsBtn">Back to Practice</button>
+      </div>
+
+      <div class="stat-grid" id="statsSummary"></div>
+
+      <div class="chart-container">
+        <h3 style="margin:0 0 12px 0;">Accuracy Trend (Last 10 Sessions)</h3>
+        <div class="chart" id="accuracyChart"></div>
+      </div>
+
+      <div class="chart-container">
+        <h3 style="margin:0 0 12px 0;">Speed Trend (Avg ms per question)</h3>
+        <div class="chart" id="speedChart"></div>
+      </div>
+
+      <div class="chart-container">
+        <h3 style="margin:0 0 12px 0;">Performance by Operation Type</h3>
+        <div id="operationBreakdown"></div>
+      </div>
+
+      <div>
+        <h3 style="margin:16px 0 8px 0;">Recent Sessions</h3>
+        <table class="history-table" id="sessionHistory">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Mode</th>
+              <th>Score</th>
+              <th>Accuracy</th>
+              <th>Avg Time</th>
+              <th>Best Streak</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="troubleSection">
+      <h2 class="section-title">Tricky facts in this range</h2>
+      <div id="troubleTags" class="row tiny"></div>
+      <p class="tiny">Click a tag to focus it in a mini-session.</p>
+    </section>
+  </main>
+</div>
+
+<div id="printLayer" aria-hidden="true">
+  <div class="gridControls no-print">
+    <button class="btn small" id="closePrint">Close</button>
+    <button class="btn small accent" id="printNow">Print</button>
+  </div>
+  <div id="gridWrap"></div>
+</div>
+
+<footer class="no-print">
+  Built for adults who want speed + accuracy without fluff. Tweak anything - you own the code.
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
